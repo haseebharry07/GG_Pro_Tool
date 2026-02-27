@@ -8,7 +8,7 @@
   window.current_location_id_cp = '';
   window.current_location_name_cp = '';
   window.current_published_theme_cp = '';
-  const script_url = 'https://cdn.locationapi.co/test/themegenerator/';
+  const script_url = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/';
   // const script_url = 'https://cdn2.locationapi.co/themegenerator/';
   const data_ark_id = 'hlpt-dashboard-customizer';
   const themegen = 'https://quepl6539h.execute-api.us-east-2.amazonaws.com/themegensetup';
