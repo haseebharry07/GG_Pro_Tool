@@ -6449,17 +6449,17 @@ function get_user_data() {
           loader.style.setProperty('display', 'none', 'important');
           loader.style.opacity = '0';
         }
-        if (typeof error_message !== 'undefined' && error_message) {
-          error_message.style.setProperty('display', 'block', 'important');
-          error_message.style.opacity = '1';
-        }
         if (typeof generate_css_message !== 'undefined' && generate_css_message) {
           generate_css_message.style.setProperty('display', 'block', 'important');
           generate_css_message.style.opacity = '1';
         }
+        if (typeof error_message !== 'undefined' && error_message) {
+          error_message.style.setProperty('display', 'none', 'important');
+          error_message.style.opacity = '0';
+        }
         if (typeof success_message !== 'undefined' && success_message) {
-          success_message.style.setProperty('display', 'none', 'important');
-          success_message.style.opacity = '0';
+          success_message.style.setProperty('display', 'block', 'important');
+          success_message.style.opacity = '1';
         }
         if (typeof script_cutom_window_wrapper !== 'undefined' && script_cutom_window_wrapper) {
           script_cutom_window_wrapper.style.setProperty('display', 'none', 'important');
