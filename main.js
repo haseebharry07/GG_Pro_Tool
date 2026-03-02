@@ -256,7 +256,7 @@ if (window.data_app == 'hl') {
 
 (function () {
   ////////////////////////////////////////
-  const themegen_url = 'https://cdn.locationapi.co/test/themegenerator/dashboard-customizer_v1.04.js?v=' + Date.now();
+  const themegen_url = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/dashboard-customizer_v1.04.js?v=' + Date.now();
   const hlpt_load_themegen = function (ref_key) {
     var load_themegen = 'true';
     if (currentScript.hasAttribute('data-themegen')) {
@@ -275,7 +275,7 @@ if (window.data_app == 'hl') {
   //////////////////////////
 
   ////////////////////////////////////////
-  const controlpanel_url = 'https://cdn.locationapi.co/test/controlpanel/cp.js?v=' + Date.now();
+  const controlpanel_url = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/controlpanel/cp.js?v=' + Date.now();
   const hlpt_load_controlpanel = function (ref_key) {
     var load_controlpanel = 'true';
     if (currentScript.hasAttribute('data-cp')) {
@@ -294,7 +294,7 @@ if (window.data_app == 'hl') {
   //////////////////////////
 
   ////////////////////////////////////////
-  const controlpanel_lp_url = 'https://cdn.locationapi.co/test/controlpanel/lp.js?v=' + Date.now();
+  const controlpanel_lp_url = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/controlpanel/lp.js?v=' + Date.now();
   const hlpt_load_controlpanel_lp = function (ref_key) {
     var load_controlpanel_lp = 'true';
     if (currentScript.hasAttribute('data-lp')) {
@@ -312,7 +312,7 @@ if (window.data_app == 'hl') {
   };
   //////////////////////////
 
-  const smart_custom_buttons = 'https://cdn.locationapi.co/test/controlpanel/scb.js?v=' + Date.now();
+  const smart_custom_buttons = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/controlpanel/scb.js?v=' + Date.now();
   const hlpt_load_smart_custom_buttons = function (ref_key) {
     var load_smart_custom_buttons = 'true';
     if (currentScript.hasAttribute('data-scb')) {
@@ -328,7 +328,7 @@ if (window.data_app == 'hl') {
       document.getElementsByTagName('head')[0].appendChild(script);
     }
   };
-  const apm_url = 'https://cdn.locationapi.co/test/controlpanel/apm.js?v=' + Date.now();
+  const apm_url = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/controlpanel/apm.js?v=' + Date.now();
   const hlpt_load_apm = function (ref_key) {
     var load_apm = 'true';
     if (currentScript.hasAttribute('data-apm')) {
@@ -346,7 +346,7 @@ if (window.data_app == 'hl') {
   };
     
   ////////////////////////////////////////
-  const clientportal_themebuilder = 'https://cdn.locationapi.co/test/clientportal/cptb.js?v=' + Date.now();
+  const clientportal_themebuilder = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/clientportal/cptb.js?v=' + Date.now();
   const hlpt_load_cptb = function (ref_key) {
     var load_cptb = 'true';
     if (currentScript.hasAttribute('data-cptb')) {
