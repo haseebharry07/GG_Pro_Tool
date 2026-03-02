@@ -346,7 +346,7 @@ if (window.data_app == 'hl') {
   };
     
   ////////////////////////////////////////
-  const clientportal_themebuilder = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/clientportal/cptb.js?v=' + Date.now();
+  const clientportal_themebuilder = 'https://cdn.jsdelivr.net/gh/haseebharry07/GG_Pro_Tool/main/clientportal/cptb.js?v=' + Date.now();
   const hlpt_load_cptb = function (ref_key) {
     var load_cptb = 'true';
     if (currentScript.hasAttribute('data-cptb')) {
