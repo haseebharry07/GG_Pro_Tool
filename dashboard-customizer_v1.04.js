@@ -6549,7 +6549,7 @@ function get_user_data() {
       // }
     }
   };
-
+console.log('Code Came here hlpt_loadEmbed');
   //// setup GET-Receive data.
   const hlpt_loadEmbed = (url, cb) => {
     let xmlhttp;
@@ -14296,7 +14296,7 @@ const menugroups_settings_allowed = function () {
                   apply_lock();
                 }
               } catch (error) {
-                // console.error(`Google Sheet is not found: ${error}`);
+                console.error(`Google Sheet is not found: ${error}`);
               }
             });
           }
@@ -15105,6 +15105,8 @@ const menugroups_settings_allowed = function () {
     console.log('change1');  
   }
   /// hlpt load embed
+  console.log('Code Came here /// hlpt load embed');
+
   hlpt_loadEmbed('https://auth.locationapi.co/resources1?k=' + get_data_attribute_value('data-ark') + '&s=dashboard_styles' + '&v=' + Date.now(), function (j) {
     let r = JSON.parse(j);
     if (r.e || r.p == 'lifetime') {
