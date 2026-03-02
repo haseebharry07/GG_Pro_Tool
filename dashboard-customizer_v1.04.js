@@ -8,7 +8,7 @@
   window.current_location_id_cp = '';
   window.current_location_name_cp = '';
   window.current_published_theme_cp = '';
-  const script_url = 'https://raw.githubusercontent.com/haseebharry07/GG_Pro_Tool/main/';
+  const script_url = 'https://cdn.jsdelivr.net/gh/haseebharry07/GG_Pro_Tool@main/';
   // const script_url = 'https://cdn2.locationapi.co/themegenerator/';
   const data_ark_id = 'hlpt-dashboard-customizer';
   const themegen = 'https://quepl6539h.execute-api.us-east-2.amazonaws.com/themegensetup';
@@ -6568,6 +6568,7 @@ function get_user_data() {
     if (document.body.classList.contains('IsAdmin') || document.body.classList.contains('IsAdminTB')) {
       user_allowed = true;
     }
+    console.log('is_user_allowed',user_allowed);
     return user_allowed;
   };
 
@@ -6620,6 +6621,7 @@ function get_user_data() {
         tb_btn.style.display = 'none';
       }
     }
+    console.log('here is tballowed',tb_allowed);
     return tb_allowed;
   };
 
