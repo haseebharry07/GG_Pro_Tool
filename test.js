@@ -3,6 +3,6 @@
         licenseKey: '17921640110654'
     });
     modalflow.identify('{{user.id}}', {
-        name: '{{user.name}}',
-        email: '{{user.email}}'
+        name: 'Bilal Khalid',
+        email: 'bilal.khalid@baam.com'
     });
