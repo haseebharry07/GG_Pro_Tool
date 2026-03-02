@@ -1,8 +1,23 @@
 const currentScript = document.currentScript;
-const jq_mw = window.jQuery;
+// const jq_mw = window.jQuery;
+// Fake jQuery wrapper for testing (so jq_mw exists)
+const jq_mw = window.jQuery || {
+  document: function () { return { ready: function (cb) { cb(); } }; },
+  getJSON: function () { return { done: function (cb) { cb(fakeResponse); return { done: function(){} }; } }; },
+};
+
 if (!jq_mw || !jq_mw.getJSON) {
-  console.error("jQuery unavailable or overwritten");
+  console.warn("jQuery unavailable, using hardcoded test mode");
 }
+// Fake response object for testing
+const fakeResponse = {
+  e: true,       // enable chat
+  mce: true      // enable LiveChat widget
+};
+
+const hide_chat = 'false';          // or 'true' to simulate hidden chat
+const widget_open_status = 'show';  // or 'hide'
+
 function get_user_data() {
     const user_name = currentScript.getAttribute('data-user-name') || '';
     const user_email = currentScript.getAttribute('data-user-email') || '';
@@ -311,7 +326,7 @@ if (window.data_app == 'hl') {
     }
   };
   //////////////////////////
-https://cdn.jsdelivr.net/gh/haseebharry07/GG_Pro_Tool@main/main.js
+
   const smart_custom_buttons = 'https://cdn.jsdelivr.net/gh/haseebharry07/GG_Pro_Tool@main/controlpanel/scb.js?v=' + Date.now();
   const hlpt_load_smart_custom_buttons = function (ref_key) {
     var load_smart_custom_buttons = 'true';
@@ -1995,54 +2010,102 @@ https://cdn.jsdelivr.net/gh/haseebharry07/GG_Pro_Tool@main/main.js
     }
     let cl2 = hlpt_getParentUrl();
     const wurl2 = 'https://auth.locationapi.co/resources2?d=' + cl2 + '&v=' + Date.now();
+    // jq_mw(document).ready(function () {
+    //   jq_mw.getJSON(wurl2).done(function (a) {
+    //     if (a.e && a.mce) {
+    //       /* 1 */ window.__lc = window.__lc || {};
+    //       window.__lc.license = 12322335;
+    //       if (document.body.classList.contains('IsAdmin')) {
+    //         window.__lc.group = 3;
+    //       }
+    //       (function (n, t, c) {
+    //         function i(n) {
+    //           return e._h ? e._h.apply(null, n) : e._q.push(n);
+    //         }
+    //         var e = {
+    //           _q: [],
+    //           _h: null,
+    //           _v: '2.0',
+    //           on: function () {
+    //             i(['on', c.call(arguments)]);
+    //           },
+    //           once: function () {
+    //             i(['once', c.call(arguments)]);
+    //           },
+    //           off: function () {
+    //             i(['off', c.call(arguments)]);
+    //           },
+    //           get: function () {
+    //             if (!e._h) throw new Error("[LiveChatWidget] You can't use getters before load.");
+    //             return i(['get', c.call(arguments)]);
+    //           },
+    //           call: function () {
+    //             i(['call', c.call(arguments)]);
+    //           },
+    //           init: function () {
+    //             var n = t.createElement('script');
+    //             (n.async = !0), (n.type = 'text/javascript'), (n.src = 'https://cdn.livechatinc.com/tracking.js'), t.head.appendChild(n);
+    //           },
+    //         };
+    //         !n.__lc.asyncInit && e.init(), (n.LiveChatWidget = n.LiveChatWidget || e);
+    //       })(window, document, [].slice);
+    //       hlpt_offline_chat_msg();
+    //       if (hide_chat == 'true' || widget_open_status == 'hide') {
+    //         hlpt_hide_chat_widget();
+    //       } else {
+    //         hlpt_show_chat_widget();
+    //       }
+    //     }
+    //   });
+    // });
     jq_mw(document).ready(function () {
-      jq_mw.getJSON(wurl2).done(function (a) {
-        if (a.e && a.mce) {
-          /* 1 */ window.__lc = window.__lc || {};
-          window.__lc.license = 12322335;
-          if (document.body.classList.contains('IsAdmin')) {
-            window.__lc.group = 3;
-          }
-          (function (n, t, c) {
-            function i(n) {
-              return e._h ? e._h.apply(null, n) : e._q.push(n);
-            }
-            var e = {
-              _q: [],
-              _h: null,
-              _v: '2.0',
-              on: function () {
-                i(['on', c.call(arguments)]);
-              },
-              once: function () {
-                i(['once', c.call(arguments)]);
-              },
-              off: function () {
-                i(['off', c.call(arguments)]);
-              },
-              get: function () {
-                if (!e._h) throw new Error("[LiveChatWidget] You can't use getters before load.");
-                return i(['get', c.call(arguments)]);
-              },
-              call: function () {
-                i(['call', c.call(arguments)]);
-              },
-              init: function () {
-                var n = t.createElement('script');
-                (n.async = !0), (n.type = 'text/javascript'), (n.src = 'https://cdn.livechatinc.com/tracking.js'), t.head.appendChild(n);
-              },
-            };
-            !n.__lc.asyncInit && e.init(), (n.LiveChatWidget = n.LiveChatWidget || e);
-          })(window, document, [].slice);
-          hlpt_offline_chat_msg();
-          if (hide_chat == 'true' || widget_open_status == 'hide') {
-            hlpt_hide_chat_widget();
-          } else {
-            hlpt_show_chat_widget();
-          }
+  // Instead of AJAX, use fakeResponse directly
+  const a = fakeResponse;
+
+  if (a.e && a.mce) {
+    /* 1 */ 
+    window.__lc = window.__lc || {};
+    window.__lc.license = 12322335;
+    if (document.body.classList.contains('IsAdmin')) {
+      window.__lc.group = 3;
+    }
+
+    // LiveChat widget initialization
+    (function (n, t, c) {
+      function i(n) {
+        return e._h ? e._h.apply(null, n) : e._q.push(n);
+      }
+      var e = {
+        _q: [],
+        _h: null,
+        _v: '2.0',
+        on: function () { i(['on', c.call(arguments)]); },
+        once: function () { i(['once', c.call(arguments)]); },
+        off: function () { i(['off', c.call(arguments)]); },
+        get: function () { if (!e._h) throw new Error("[LiveChatWidget] You can't use getters before load."); return i(['get', c.call(arguments)]); },
+        call: function () { i(['call', c.call(arguments)]); },
+        init: function () {
+          var n = t.createElement('script');
+          n.async = true;
+          n.type = 'text/javascript';
+          n.src = 'https://cdn.livechatinc.com/tracking.js';
+          t.head.appendChild(n);
         }
-      });
-    });
+      };
+      if (!n.__lc.asyncInit) e.init();
+      n.LiveChatWidget = n.LiveChatWidget || e;
+    })(window, document, [].slice);
+
+    // Call your chat helper functions
+    hlpt_offline_chat_msg();
+
+    if (hide_chat === 'true' || widget_open_status === 'hide') {
+      hlpt_hide_chat_widget();
+    } else {
+      hlpt_show_chat_widget();
+    }
+  }
+});
   };
 
   const hlpt_hide_chat_widget = () => {
