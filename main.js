@@ -1,19 +1,51 @@
 const currentScript = document.currentScript;
 // const jq_mw = window.jQuery;
-// Fake jQuery wrapper for testing (so jq_mw exists)
-const jq_mw = window.jQuery || {
-  document: function () { return { ready: function (cb) { cb(); } }; },
-  getJSON: function () { return { done: function (cb) { cb(fakeResponse); return { done: function(){} }; } }; },
+// Fake response objects
+const fakeA = {
+  e: true,
+  p: 'lifetime',
+  rk: 'testkey123',
+  mid: 'mid123',
+  lw: 'lw123'
 };
+
+const fakeMW = {
+  wp: 'bottom_right',
+  wi: 'widget_info',
+  egw: 'egw_info',
+  wt: 'advanced',
+  wc: '#ff0000',
+  p: 'testP'
+};
+const fakeAgSettings = {
+  someSetting: true
+};
+const fakeResponse = {
+  e: true,       // enable chat
+  mce: true      // enable LiveChat widget
+};
+const jq_mw = window.jQuery || {
+  document: function() { return { ready: function(cb) { cb(); } }; },
+  getJSON: function(url) { 
+    // return a "promise-like" object
+    return { done: function(cb) { 
+      if (url.includes('modal/widget')) cb(fakeMW);
+      else if (url.includes('customizerapi')) cb(fakeAgSettings);
+      else cb(fakeA);
+      return { done: function(){} }; 
+    } };
+  }
+};
+// const jq_mw = window.jQuery || {
+//   document: function () { return { ready: function (cb) { cb(); } }; },
+//   getJSON: function () { return { done: function (cb) { cb(fakeResponse); return { done: function(){} }; } }; },
+// };
 
 if (!jq_mw || !jq_mw.getJSON) {
   console.warn("jQuery unavailable, using hardcoded test mode");
 }
 // Fake response object for testing
-const fakeResponse = {
-  e: true,       // enable chat
-  mce: true      // enable LiveChat widget
-};
+
 
 const hide_chat = 'false';          // or 'true' to simulate hidden chat
 const widget_open_status = 'show';  // or 'hide'
@@ -3497,115 +3529,182 @@ if (window.data_app == 'hl') {
       }
     }
   }
+jq_mw(document).ready(function() {
+  const a = fakeA;
 
-  jq_mw.getJSON(wurl).done(function (a) {
-    if (window.data_app == 'hl' && (a.e || a.p == 'lifetime')) {
-      if (a.rk) {
-        var ref_key2 = a.rk;
-        window.cp_ark = ref_key2;
-        hlpt_load_themegen(ref_key2);
-        hlpt_load_controlpanel(ref_key2);
-        hlpt_load_smart_custom_buttons(ref_key2);
-        hlpt_load_apm(ref_key2);
-        // hlpt_load_hl_menu_structure(ref_key2);
-        hlpt_load_controlpanel_lp(ref_key2);
-        hlpt_load_cptb(ref_key2);
-        // hlpt_load_guidedtour(ref_key2);
-      }
-      if (isFlowBuilderInUse()) {
-        hlpt_load_flowbuilder(mfbkey, (a.rk || currentScript.getAttribute('data-refkey') || ''));
-      }
-      hlpt_userflow(ufkey);
+  if (window.data_app == 'hl' && (a.e || a.p == 'lifetime')) {
+    if (a.rk) {
+      const ref_key2 = a.rk;
+      window.cp_ark = ref_key2;
+      hlpt_load_themegen(ref_key2);
+      hlpt_load_controlpanel(ref_key2);
+      hlpt_load_smart_custom_buttons(ref_key2);
+      hlpt_load_apm(ref_key2);
+      hlpt_load_controlpanel_lp(ref_key2);
+      hlpt_load_cptb(ref_key2);
+    }
+    if (isFlowBuilderInUse()) {
+      hlpt_load_flowbuilder(mfbkey, (a.rk || currentScript.getAttribute('data-refkey') || ''));
+    }
+    hlpt_userflow(ufkey);
+    is_userflow_attribs();
+  }
+
+  if (a.e && a.mid) {
+    const mw = fakeMW;
+    const agsettings = fakeAgSettings;
+    
+    window.agsettings = agsettings;
+    update_location_logos();
+    default_agency_logo();
+    setup_agency_modal_options(agsettings);
+    if (window.data_app == 'hl') {
       is_userflow_attribs();
+      hlpt_userflow(ufkey, agsettings);
     }
-    if (a.e && a.mid) {
-      const mwurl = 'https://join.modalsupport.com/modal/widget?mid=' + a.mid + '&v=' + Date.now();
-      jq_mw.getJSON(mwurl).done(function (mw) {
-        //live url
-        // const cust_url = 'https://customizerapi.locationapi.co/agency?k=' + a.rk + '&v=' + Date.now();
-        //dev url
-        const cust_url = 'https://customizerapi.locationapi.co/dev/agency?k=' + a.rk + '&v=' + Date.now();
-        jq_mw.getJSON(cust_url).done(function (agsettings) {
-          window.agsettings = agsettings;
-          update_location_logos();
-          default_agency_logo();
-          setup_agency_modal_options(agsettings);
-          if (window.data_app == 'hl') {
-            is_userflow_attribs();
-            hlpt_userflow(ufkey, agsettings);
-            if (isFlowBuilderInUse() && window.is_agency_guided_tour_enabled) {
-              hlpt_load_flowbuilder(mfbkey, a.rk || currentScript.getAttribute('data-refkey') || '');
-            }
-            setup_agency_guidedtour(agsettings);
-          }
-          handle_agency_modal_location_change(agsettings);
-          hlpt_members_login_widget();
-          if (mw.wp) {
-            window.wp = mw.wp;
-            if (currentScript.hasAttribute('data-app') && currentScript.getAttribute('data-app') === 'gen') {
-              window.wp = 'bottom_right';
-            }
-          }
-          if (mw.wi) {
-            window.wi = mw.wi;
-          }
-          if (mw.egw) {
-            window.egw = mw.egw;
-          }
-          if (mw.wt) {
-            if (mw.wt == 'advance') {
-              window.wt = 'classic';
-            } else {
-              window.wt = mw.wt;
-            }
-          }
-          window.wt = 'advanced';
-          if (mw.wc) {
-            window.wc = mw.wc;
-            document.head.insertAdjacentHTML('beforeend', `<style>:root{--primaryColor:` + window.wc + `;}</style>`);
-          } else if (window.wc) {
-            document.head.insertAdjacentHTML('beforeend', `<style>:root{--primaryColor:#000000;}</style>`);
-          }
-          if (mw.p) {
-            window.p = mw.p;
-          }
-          window.mid = a.mid;
-          window.lw = a.lw;
-          open_modal_support('hide'); 
-          hlpt_jq_cccss_ms();
-          post_message_calls();
-          hlpt_advance_widget();
-          hlpt_advance_widget_close_button();
-          setup_dragable_widget_icon();
-          //hlpt_classic_widget();
-          hlpt_new_sidebar_widget();
-          hlpt_help_widget_setup();
 
-          if (document.body.contains(document.querySelector('.ms_widget')) && document.querySelector('.ms_widget')) {
-            document.querySelector('.ms_widget').addEventListener('click', handle_widget_icon_click, false);
-          }
-          hlpt_autoload_support();
-          addAwesomeFontSheet('https://kit.fontawesome.com/5e5db45630.css');
-          mo_launcher_icon();
-          initLocationContextWatcher();  
-          // Function to handle route changes
-          $(function () {
-            handlePgChange(agsettings);
-            setInterval(function () {
-              if (window.location.href !== handlePgChange.lastUrl) {
-                handlePgChange.lastUrl = window.location.href;
-                handlePgChange(agsettings);
-              }
-            }, 100);
-          });
-
-          $(window).on('hashchange', function (e) {
-            handlePgChange(agsettings);
-          });
-        });
-      });
+    if (mw.wp) window.wp = mw.wp;
+    if (mw.wi) window.wi = mw.wi;
+    if (mw.egw) window.egw = mw.egw;
+    window.wt = mw.wt || 'advanced';
+    if (mw.wc) {
+      window.wc = mw.wc;
+      document.head.insertAdjacentHTML('beforeend', `<style>:root{--primaryColor:${window.wc};}</style>`);
+    } else {
+      document.head.insertAdjacentHTML('beforeend', `<style>:root{--primaryColor:#000000;}</style>`);
     }
-  });
+    if (mw.p) window.p = mw.p;
+
+    window.mid = a.mid;
+    window.lw = a.lw;
+
+    open_modal_support('hide'); 
+    hlpt_jq_cccss_ms();
+    post_message_calls();
+    hlpt_advance_widget();
+    hlpt_advance_widget_close_button();
+    setup_dragable_widget_icon();
+    hlpt_new_sidebar_widget();
+    hlpt_help_widget_setup();
+
+    if (document.body.contains(document.querySelector('.ms_widget'))) {
+      document.querySelector('.ms_widget').addEventListener('click', handle_widget_icon_click, false);
+    }
+
+    hlpt_autoload_support();
+    addAwesomeFontSheet('https://kit.fontawesome.com/5e5db45630.css');
+    mo_launcher_icon();
+    initLocationContextWatcher();
+  }
+});
+  // jq_mw.getJSON(wurl).done(function (a) {
+  //   if (window.data_app == 'hl' && (a.e || a.p == 'lifetime')) {
+  //     if (a.rk) {
+  //       var ref_key2 = a.rk;
+  //       window.cp_ark = ref_key2;
+  //       hlpt_load_themegen(ref_key2);
+  //       hlpt_load_controlpanel(ref_key2);
+  //       hlpt_load_smart_custom_buttons(ref_key2);
+  //       hlpt_load_apm(ref_key2);
+  //       // hlpt_load_hl_menu_structure(ref_key2);
+  //       hlpt_load_controlpanel_lp(ref_key2);
+  //       hlpt_load_cptb(ref_key2);
+  //       // hlpt_load_guidedtour(ref_key2);
+  //     }
+  //     if (isFlowBuilderInUse()) {
+  //       hlpt_load_flowbuilder(mfbkey, (a.rk || currentScript.getAttribute('data-refkey') || ''));
+  //     }
+  //     hlpt_userflow(ufkey);
+  //     is_userflow_attribs();
+  //   }
+  //   if (a.e && a.mid) {
+  //     const mwurl = 'https://join.modalsupport.com/modal/widget?mid=' + a.mid + '&v=' + Date.now();
+  //     jq_mw.getJSON(mwurl).done(function (mw) {
+  //       //live url
+  //       // const cust_url = 'https://customizerapi.locationapi.co/agency?k=' + a.rk + '&v=' + Date.now();
+  //       //dev url
+  //       const cust_url = 'https://customizerapi.locationapi.co/dev/agency?k=' + a.rk + '&v=' + Date.now();
+  //       jq_mw.getJSON(cust_url).done(function (agsettings) {
+  //         window.agsettings = agsettings;
+  //         update_location_logos();
+  //         default_agency_logo();
+  //         setup_agency_modal_options(agsettings);
+  //         if (window.data_app == 'hl') {
+  //           is_userflow_attribs();
+  //           hlpt_userflow(ufkey, agsettings);
+  //           if (isFlowBuilderInUse() && window.is_agency_guided_tour_enabled) {
+  //             hlpt_load_flowbuilder(mfbkey, a.rk || currentScript.getAttribute('data-refkey') || '');
+  //           }
+  //           setup_agency_guidedtour(agsettings);
+  //         }
+  //         handle_agency_modal_location_change(agsettings);
+  //         hlpt_members_login_widget();
+  //         if (mw.wp) {
+  //           window.wp = mw.wp;
+  //           if (currentScript.hasAttribute('data-app') && currentScript.getAttribute('data-app') === 'gen') {
+  //             window.wp = 'bottom_right';
+  //           }
+  //         }
+  //         if (mw.wi) {
+  //           window.wi = mw.wi;
+  //         }
+  //         if (mw.egw) {
+  //           window.egw = mw.egw;
+  //         }
+  //         if (mw.wt) {
+  //           if (mw.wt == 'advance') {
+  //             window.wt = 'classic';
+  //           } else {
+  //             window.wt = mw.wt;
+  //           }
+  //         }
+  //         window.wt = 'advanced';
+  //         if (mw.wc) {
+  //           window.wc = mw.wc;
+  //           document.head.insertAdjacentHTML('beforeend', `<style>:root{--primaryColor:` + window.wc + `;}</style>`);
+  //         } else if (window.wc) {
+  //           document.head.insertAdjacentHTML('beforeend', `<style>:root{--primaryColor:#000000;}</style>`);
+  //         }
+  //         if (mw.p) {
+  //           window.p = mw.p;
+  //         }
+  //         window.mid = a.mid;
+  //         window.lw = a.lw;
+  //         open_modal_support('hide'); 
+  //         hlpt_jq_cccss_ms();
+  //         post_message_calls();
+  //         hlpt_advance_widget();
+  //         hlpt_advance_widget_close_button();
+  //         setup_dragable_widget_icon();
+  //         //hlpt_classic_widget();
+  //         hlpt_new_sidebar_widget();
+  //         hlpt_help_widget_setup();
+
+  //         if (document.body.contains(document.querySelector('.ms_widget')) && document.querySelector('.ms_widget')) {
+  //           document.querySelector('.ms_widget').addEventListener('click', handle_widget_icon_click, false);
+  //         }
+  //         hlpt_autoload_support();
+  //         addAwesomeFontSheet('https://kit.fontawesome.com/5e5db45630.css');
+  //         mo_launcher_icon();
+  //         initLocationContextWatcher();  
+  //         // Function to handle route changes
+  //         $(function () {
+  //           handlePgChange(agsettings);
+  //           setInterval(function () {
+  //             if (window.location.href !== handlePgChange.lastUrl) {
+  //               handlePgChange.lastUrl = window.location.href;
+  //               handlePgChange(agsettings);
+  //             }
+  //           }, 100);
+  //         });
+
+  //         $(window).on('hashchange', function (e) {
+  //           handlePgChange(agsettings);
+  //         });
+  //       });
+  //     });
+  //   }
+  // });
 
   console.log(`Widget Init... v1.12.0`);
   /// main widget script
