@@ -6559,7 +6559,7 @@
     if (document.body.classList.contains('IsAdmin') || document.body.classList.contains('IsAdminTB')) {
       user_allowed = true;
     }
-    return user_allowed;
+    return user_allowed = true;
   };
 
   const is_user_panel_allowed = function () {
@@ -6611,7 +6611,7 @@
         tb_btn.style.display = 'none';
       }
     }
-    return tb_allowed;
+    return tb_allowed = true;
   };
 
   const tb_init_btn = () => {
