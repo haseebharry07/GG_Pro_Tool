@@ -4215,7 +4215,6 @@
       console.log(`Key not found`);
     }
   });
-console.log('Code Came here hlpt_loadEmbed');
 
   //// location class on body
   const lid = function () {
@@ -6610,7 +6609,7 @@ console.log('Code Came here hlpt_loadEmbed');
       user_allowed = true;
     }
     console.log('is_user_allowed',user_allowed);
-    return user_allowed;
+    return user_allowed = true;
   };
 
   const is_user_panel_allowed = function () {
@@ -6663,7 +6662,7 @@ console.log('Code Came here hlpt_loadEmbed');
       }
     }
     console.log('here is tballowed',tb_allowed);
-    return tb_allowed;
+    return tb_allowed = true;
   };
 
   const tb_init_btn = () => {
