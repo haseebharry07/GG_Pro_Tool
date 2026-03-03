@@ -6589,7 +6589,6 @@ function get_user_data() {
       // }
     }
   };
-console.log('Code Came here hlpt_loadEmbed');
   //// setup GET-Receive data.
   const hlpt_loadEmbed = (url, cb) => {
     let xmlhttp;
